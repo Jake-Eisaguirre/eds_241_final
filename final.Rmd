@@ -1,5 +1,5 @@
 ---
-title: "EDS241: Final"
+title: "EDS241: Final Assingment"
 author: "Jake Eisaguirre"
 date: '`r format(Sys.time(), "%m/%d/%Y")`'
 output: 
@@ -27,11 +27,7 @@ data <- read_csv(here("KM_EDS241.csv"))
 
 ##### (a)
 
-\noindent Using the data for 1981, estimate a simple OLS regression of real house values on the
-indicator for being located near the incinerator in 1981. What is the house value “penalty” for
-houses located near the incinerator? Does this estimated coefficient correspond to the ‘causal’
-effect of the incinerator (and the negative amenities that come with it) on housing values?
-Explain why or why not.
+\noindent Using the data for 1981, estimate a simple OLS regression of real house values on the indicator for being located near the incinerator in 1981. What is the house value “penalty” for houses located near the incinerator? Does this estimated coefficient correspond to the ‘causal’ effect of the incinerator (and the negative amenities that come with it) on housing values? Explain why or why not.
 
 ```{r}
 data_81 <- data %>% 
@@ -46,32 +42,33 @@ tidy(mod1) %>%
   kable()
 ```
 
+\noindent Answer: The model shows that the penatly for being near the incinerator for the year 1981 is about $30688, or in other words the average housing prices for houses near the incineratror is $30688 less than the average housing prices far away from the incinerator. No I do not believe this is representative of the causal effect of adding an incinerator because to begin with the incinerator would not have been added near places with expensive houses due to push back from home owners.
+
 
 ##### (b)
 
-\noindent Using the data for 1978, provide some evidence the location choice of the incinerator was
-not “random”, but rather selected on the basis of house values and characteristics. [Hint: in the
-1978 sample, are house values and characteristics balanced by nearinc status?]
+\noindent Using the data for 1978, provide some evidence the location choice of the incinerator was not “random”, but rather selected on the basis of house values and characteristics. [Hint: in the 1978 sample, are house values and characteristics balanced by nearinc status?]
 
 ```{r}
 data_78 <- data %>% 
   filter(year == 1978)
 
-mod2 <- lm_robust(nearinc ~  rprice + rooms + area + year + land + age, data = data_78)
+mod2 <- lm_robust(rprice ~ nearinc, data = data_78)
+```
 
+``` {r}
 tidy(mod2) %>%
   kable()
 ```
 
+\noindent Answer: The model shows that housing prices in 1978 from the surrounding area prior to the incinerator location were already on average worth $18,824 less that houses that are considered farther away. This points to the incinerator location not being random and was selected to be placed in a less wealthy area. 
+
 
 ##### (c)
 
-\noindent Based on the observed differences in (b), explain why the estimate in (a) is likely to be
-biased downward (i.e., overstate the negative effect of the incinerator on housing values).
+\noindent Based on the observed differences in (b), explain why the estimate in (a) is likely to be biased downward (i.e., overstate the negative effect of the incinerator on housing values).
 
-```{r}
-
-```
+\noindent Answer: Since there was a housing value difference in 1978 and one in 1981, Our first model estimate is biased downward. We can not assume that all the ~$30,000 difference can be due to the presence of the incinerator because we already saw a difference of ~$18000 prior to the incinerator being installed. Our models can not dis-associate the effect of the incinerator and two different locations, so the incinerator effect gets added on to make it ~$30000
 
 
 ##### (d)
